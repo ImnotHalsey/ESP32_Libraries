@@ -8,6 +8,6 @@ def get_timestamp():
     current_time = utime.time()
     ist_time = current_time + timezone_offset
     formatted_time = utime.localtime(ist_time)
-    timestamp = "{:04}-{:02}-{:02} {:02}:{:02}:{:02}".format(*formatted_time[:6])
-    return timestamp
+    timestamp = "{:04}{:02}{:02}{:02}{:02}{:02}".format(*formatted_time[:6])
+    return str(timestamp)
 

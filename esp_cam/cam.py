@@ -1,5 +1,5 @@
 from time import sleep 
-import urandom, machine, camera
+import camera, machine,uos
 from utilities import get_timestamp
 
 
@@ -7,16 +7,22 @@ led = machine.Pin(4, machine.Pin.OUT)
 
 def take_photo(flash=None):
     try:
-        camera.init(0, format=camera.JPEG)
-        if flash: led.on()
-        img = camera.capture()
-        if flash: led.off()
+        try: 
+            camera.init(0, format=camera.JPEG)
+            if flash:led.on()
+            img = camera.capture()
+            if flash:led.off()
+            try:
+                file_path = f"SD/{get_timestamp()}.jpg"
+                with open(file_path, "wb") as file:
+                    file.write(bytearray(img))
+                print(f"Photo saved : {file_path}")
+                return True, file_path
+            except Exception as e:
+                print(f"Error saving photo: {e}")
+                return False, None
+        except Exception as e:
+            print(f"Error Initiating Camera: {e}")
+            return False, None
+    finally:
         camera.deinit()
-        file_path = f"photo/{get_timestamp()}"
-        with open(file_path, "wb") as file:
-            file.write(img)
-        print(f"Photo saved: {file_path}")
-        return True, file_path
-    except Exception as e:
-        print(f"Error capturing or saving photo: {e}")
-        return 0,0
