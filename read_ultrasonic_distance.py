@@ -15,7 +15,7 @@ def read_distance():
     pulse_duration = time.ticks_diff(pulse_end, pulse_start)
     distance = (pulse_duration * 34300) / 2 / 1000000  # Convert to meters
     if distance > 0 and distance < 50:return distance
-    else: return None
+    else:return None
     
 while True:
     dist = read_distance()
